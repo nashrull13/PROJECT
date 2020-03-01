@@ -12,12 +12,12 @@ app.use(cors());
 require("./router/router.js")(app);
 
 const db = require("./app/db.js");
-const Role = db.role;
+// const Role = db.role;
 
-// // //force: true will drop the table if it already exists (comment this part after first run, to disable migration)
+ //force: true will drop the table if it already exists (comment this part after first run, to disable migration)
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log(`Drop and Resync with { force: true }`);
-//   initial();
+  // initial();
 // });
 // require("./router/router.js")(app);
 
@@ -37,7 +37,7 @@ const Role = db.role;
 // sgMail.send(msg);
 
 // Create a Server
-var server = app.listen(3003, "127.0.0.1", function() {
+var server = app.listen(8080, "127.0.0.1", function() {
   var host = server.address().address;
   var port = server.address().port;
   console.log("App listening at http://%s:%s", host, port);

@@ -17,28 +17,17 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.user = require("../model/user.js")(sequelize, Sequelize);
-db.role = require("../model/role.js")(sequelize, Sequelize);
-db.book = require("../model/book.js")(sequelize, Sequelize);
+db.article = require("../model/article.js")(sequelize, Sequelize);
+db.comment = require("../model/comment.js")(sequelize, Sequelize);
 
-db.user.belongsToMany(db.book, {
-  through: "book_user",
-  foreignKey: "userId",
-  otherKey: "bookId"
+db.user.hasMany(db.article, {  
+  foreignKey: "user_id"  
 });
-db.book.belongsToMany(db.user, {
-  through: "book_user",
-  foreignKey: "bookId",
-  otherKey: "userId"
+db.user.hasMany(db.comment, {
+  foreignKey: "user_id" 
 });
-db.role.belongsToMany(db.user, {
-  through: "user_roles",
-  foreignKey: "roleId",
-  otherKey: "userId"
-});
-db.user.belongsToMany(db.role, {
-  through: "user_roles",
-  foreignKey: "userId",
-  otherKey: "roleId"
+db.article.hasMany(db.comment, {  
+  foreignKey: "article_id"
 });
 
 module.exports = db;

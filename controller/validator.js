@@ -1,24 +1,18 @@
 const { check, validationResult } = require("express-validator");
 const asyncMiddleware = require("express-async-handler");
 
-const bookValidationRules = () => {
+const articleValidationRules = () => {
   return [
     check("title")
       .notEmpty()
       .withMessage("title is empty"),
-    check("author")
+    check("content")
       .notEmpty()
-      .withMessage("author is empty"),
-    check("published_date"),
-    check("pages")
+      .withMessage("content is empty"),    
+    check("status")
       .notEmpty()
-      .withMessage("pages is empty"),
-    check("language")
-      .notEmpty()
-      .withMessage("language is empty"),
-    check("published_id")
-      .notEmpty()
-      .withMessage("published_id is empty")
+      .withMessage("status is empty"),
+    
   ];
 };
 
@@ -36,8 +30,16 @@ const userValidationRules = () => {
       .notEmpty()
       .isEmail(),
     check("password")
-      .isLength({ min: 6 })
+      .isLength({ min: 3 })
+      .notEmpty(),
+    check("admin")
       .notEmpty()
+      .isBoolean()
+      .withMessage("Admin is empty"),
+    check("status")
+      .notEmpty()
+      .isBoolean()
+      .withMessage("Status is empty")
   ];
 };
 const validate = (req, res, next) => {
@@ -54,7 +56,7 @@ const validate = (req, res, next) => {
 };
 
 module.exports = {
-  bookValidationRules,
+  articleValidationRules,
   userValidationRules,
   validate
 };

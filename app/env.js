@@ -1,5 +1,5 @@
 const env = {
-  database: "books",
+  database: "blog",
   username: "root",
   password: "n",
   host: "localhost",

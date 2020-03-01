@@ -3,13 +3,13 @@ module.exports = function(app) {
   const authJwt = require("./verifyJwtToken");
   const authController = require("../controller/authController.js");
   const userController = require("../controller/userController.js");
-  const bookController = require("../controller/bookController.js");
-  const orderController = require("../controller/orderController.js");
+  const articleController = require("../controller/articleController.js");
+  const commentController = require("../controller/commentController.js");
   const db = require("../app/db.js");
-  const Book = db.book;
+  const Article = db.article;
   const express = require("express");
   const {
-    bookValidationRules,
+    articleValidationRules,
     userValidationRules,
     validate
   } = require("../controller/validator.js");
@@ -21,71 +21,65 @@ module.exports = function(app) {
   //Register
   app.post(
     "/register",
-    [
-      
-      verifySignUp.checkDuplicateUserNameOrEmail,
-      verifySignUp.checkRolesExisted, userValidationRules(), validate
-    ],
-    authController.signup
+    [ verifySignUp.checkDuplicateUserNameOrEmail, userValidationRules(), validate ],
+    authController.register
   );
 
   //Login
-  app.post("/login", authController.signin);
+  app.post("/login", authController.login);
 
   // Show all user
-  app.get("/api/users", [authJwt.verifyToken], userController.users);
+  app.get("/user", [authJwt.verifyToken, authJwt.isAdmin], userController.GetUser);
+
+  // Show user by id
+  app.get("/user/:id", [authJwt.verifyToken, authJwt.isAdmin], userController.GetUserId);
+
+  // Update user
+  app.put("/user/:id", [authJwt.verifyToken, authJwt.isAdmin], userController.UpdateUser);
 
   // Delete user
-  app.delete("/api/user/:id", [authJwt.verifyToken], userController.deleteUser);
+  app.delete("/user/:id", [authJwt.verifyToken, authJwt.isAdmin], userController.DeleteUser);
 
-  // check user
-  app.get("/api/test/user", [authJwt.verifyToken], userController.userContent);
 
-  //check role pm
-  app.get(
-    "/api/test/pm",
-    [authJwt.verifyToken, authJwt.isPmOrAdmin],
-    userController.managementBoard
-  );
+  //------------------------------------------------Article-----------------------------------------//
 
-  //check role admin
-  app.get(
-    "/api/test/admin",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    userController.adminBoard
-  );
-
-  //------------------------------------------------BOOKS-----------------------------------------//
-
-  // Insert book
+  // Insert Article
   app.post(
-    "/books",
-    [authJwt.verifyToken, authJwt.isAdmin, bookValidationRules(), validate],
-    bookController.tambahBuku
+    "/article",
+    [authJwt.verifyToken, articleValidationRules(), validate],
+    articleController.AddArticle
   );
 
-  //Update book
-  app.put("/books/:id", [authJwt.verifyToken], bookController.rubahBuku);
+  //Update article
+  app.put("/article/:id", [authJwt.verifyToken], articleController.UpdateArticle);
+  
+  //Show all article
+  app.get("/article", articleController.GetArticle);
 
-  //Delete book
-  app.delete("/books/:id", [authJwt.verifyToken], bookController.hapusBuku);
+  //Show article by id
+  app.get("/article/:id", articleController.GetArticleId);
 
-  //Show all books
-  app.get("/books", [authJwt.verifyToken], bookController.tampilsemuaBuku);
+  //Delete article
+  app.delete("/article/:id", [authJwt.verifyToken], articleController.DeleteArticle);
 
-  //Show book by id
-  app.get("/books/:id", [authJwt.verifyToken], bookController.tampilBuku);
+  //------------------------------------------------COMMENT-----------------------------------------//
 
-  //------------------------------------------------ORDERS-----------------------------------------//
+  // Insert Comment
+  app.post(
+    "/comment",
+    [authJwt.verifyToken], commentController.AddComment);
 
-  //Making order
-  app.post("/orders/:id", [authJwt.verifyToken], orderController.buatOrder);
+  //Update comment
+  app.put("/comment/:id", [authJwt.verifyToken], commentController.UpdateComment);
 
-  //Show all orders
-  app.get("/orders", [authJwt.verifyToken], orderController.liatsemuaOrder);
+  //Show all comment
+  app.get("/comment", [authJwt.verifyToken], commentController.GetComment);
 
-  //Show order by id
-  app.get("/orders/:id", [authJwt.verifyToken], orderController.liatOrder);
+  //Show comment by id
+  app.get("/comment/:id", [authJwt.verifyToken], commentController.GetCommentId);
+
+  //Delete comment
+  app.delete("/comment/:id", [authJwt.verifyToken], commentController.DeleteComment);
 
   //------------------------------------------------ ERRORS-----------------------------------------//
   // error handler 404

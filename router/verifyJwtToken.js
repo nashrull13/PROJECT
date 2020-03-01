@@ -8,8 +8,8 @@ verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"] || req.headers["authorization"];
   // Express headers are auto converted to lowercase
   if (token.startsWith("Bearer ")) {
+    
     // Remove Bearer from string
-
     token = token.slice(7, token.length);
   }
   if (!token) {
@@ -25,46 +25,27 @@ verifyToken = (req, res, next) => {
         message: "Fail to Authentication. Error -> " + err
       });
     }
-    req.userId = decoded.id;
+    req.user_id = decoded.id;
     next();
   });
 };
 isAdmin = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
-      for (let i = 0; i < roles.length; i++) {
-        console.log(roles[i].name);
-        if (roles[i].name.toUpperCase() === "ADMIN") {
+  User.findByPk(req.user_id).then(user => {
+    
+      
+        if (user.admin = true) {
           next();
           return;
         }
-      }
-      res.status(403).send("Require Admin Role!");
+      
+      res.status(403).send("Require Admin!");
       return;
-    });
+    
   });
 };
-isPmOrAdmin = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name.toUpperCase() === "PM") {
-          next();
-          return;
-        }
 
-        if (roles[i].name.toUpperCase() === "ADMIN") {
-          next();
-          return;
-        }
-      }
-      res.status(403).send("Require PM or Admin Roles!");
-    });
-  });
-};
 const authJwt = {};
 authJwt.verifyToken = verifyToken;
 authJwt.isAdmin = isAdmin;
-authJwt.isPmOrAdmin = isPmOrAdmin;
 
 module.exports = authJwt;
