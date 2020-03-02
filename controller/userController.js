@@ -51,12 +51,12 @@ exports.GetUserId = asyncMiddleware(async (req, res) => {
 exports.UpdateUser = asyncMiddleware(async (req, res) => {
   await User.update(
     {
-      id: req.body.id,
-      name: req.body.name,
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-      admin: req.body.admin,
+      // id: req.body.id,
+      // name: req.body.name,
+      // username: req.body.username,
+      // email: req.body.email,
+      // password: req.body.password,
+      // admin: req.body.admin,
       status: req.body.status
     },
     { where: { id: req.params.id } }
