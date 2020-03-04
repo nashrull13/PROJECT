@@ -21,24 +21,33 @@ module.exports = function(app) {
   //Register
   app.post(
     "/register",
-    [ verifySignUp.checkDuplicateUserNameOrEmail, userValidationRules(), validate ],
+    [ verifySignUp.checkDuplicateUserNameOrEmail ],
     authController.register
   );
 
   //Login
-  app.post("/login", authController.login);
+  app.post("/login", //[authJwt.verifyToken], 
+  authController.login);
 
   // Show all user
-  app.get("/user", [authJwt.verifyToken, authJwt.isAdmin], userController.GetUser);
+  app.get("/user", 
+  //[authJwt.verifyToken], 
+  userController.GetUser);
 
   // Show user by id
-  app.get("/user/:id", [authJwt.verifyToken, authJwt.isAdmin], userController.GetUserId);
+  app.get("/user/:id", 
+  //[authJwt.verifyToken], 
+  userController.GetUserId);
 
   // Update user
-  app.put("/user/:id", [authJwt.verifyToken, authJwt.isAdmin], userController.UpdateUser);
+  app.put("/user/:id", 
+  //[authJwt.verifyToken], 
+  userController.UpdateUser);
 
   // Delete user
-  app.delete("/user/:id", [authJwt.verifyToken, authJwt.isAdmin], userController.DeleteUser);
+  app.delete("/user/:id", 
+  //[authJwt.verifyToken], 
+  userController.DeleteUser);
 
 
   //------------------------------------------------Article-----------------------------------------//
@@ -46,40 +55,86 @@ module.exports = function(app) {
   // Insert Article
   app.post(
     "/article",
-    [authJwt.verifyToken, articleValidationRules(), validate],
+    //[authJwt.verifyToken],
     articleController.AddArticle
   );
 
   //Update article
-  app.put("/article/:id", [authJwt.verifyToken], articleController.UpdateArticle);
-  
-  //Show all article
-  app.get("/article", articleController.GetArticle);
-
-  //Show article by id
-  app.get("/article/:id", articleController.GetArticleId);
-
+  app.put("/article/:id", //[authJwt.verifyToken], 
+  articleController.UpdateArticleStatus);
+    
   //Delete article
   app.delete("/article/:id", [authJwt.verifyToken], articleController.DeleteArticle);
+
+  app.get(
+    "/articlefalse",
+    // , [authJwt.verifyToken]
+    articleController.GetArticleFalse
+  );
+  app.get(
+    "/articlecomment/:id",
+    // [authJwt.verifyToken],
+    commentController.GetCommentbyArticle
+  );
+  app.get(
+    "/article",
+    // , [authJwt.verifyToken]
+    articleController.GetArticle
+  );
+  app.get(
+    "/articleadmin",
+    // , [authJwt.verifyToken]
+    articleController.GetArticleAdmin
+  );
+  app.get(
+    "/articleguess",
+    // , [authJwt.verifyToken]
+    articleController.GetArticleGuess
+  );
+  app.get(
+    "/articletrue",
+    // , [authJwt.verifyToken]
+    articleController.GetArticleTrue
+  );
+
+  /* Tampil book by ID. */
+  app.get(
+    "/article/:id",
+    // [authJwt.verifyToken],
+    articleController.GetArticleId
+  );
+  app.get(
+    "/articleuser/:id",
+    // [authJwt.verifyToken],
+    articleController.GetArticleIdUser
+  );
 
   //------------------------------------------------COMMENT-----------------------------------------//
 
   // Insert Comment
   app.post(
-    "/comment",
-    [authJwt.verifyToken], commentController.AddComment);
+    "/comment/:id_article/:id_user",
+    //[authJwt.verifyToken], 
+    commentController.AddComment);
 
   //Update comment
-  app.put("/comment/:id", [authJwt.verifyToken], commentController.UpdateComment);
+  app.put("/commenttrue/:id", //[authJwt.verifyToken], 
+  commentController.UpdateCommentTrue);
 
-  //Show all comment
-  app.get("/comment", [authJwt.verifyToken], commentController.GetComment);
+  app.put("/commentfalse/:id", //[authJwt.verifyToken], 
+  commentController.UpdateCommentFalse);
 
-  //Show comment by id
-  app.get("/comment/:id", [authJwt.verifyToken], commentController.GetCommentId);
+  //Show comment by article
+  app.get("/comment", //[authJwt.verifyToken], 
+  commentController.GetComment);
+
+  // //Show comment by id
+  // app.get("/comment/:id", [authJwt.verifyToken], commentController.GetCommentId);
 
   //Delete comment
-  app.delete("/comment/:id", [authJwt.verifyToken], commentController.DeleteComment);
+  app.delete("/comment/:id", 
+  // [authJwt.verifyToken], 
+  commentController.DeleteComment);
 
   //------------------------------------------------ ERRORS-----------------------------------------//
   // error handler 404

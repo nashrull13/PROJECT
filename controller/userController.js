@@ -10,7 +10,7 @@ app.use(express.json());
 exports.GetUser = asyncMiddleware(async (req, res) => {
   const user = await User.findAll({
     attributes: [
-      "id",
+      "id_user",
       "name",
       "username",
       "email",
@@ -31,7 +31,7 @@ exports.GetUserId = asyncMiddleware(async (req, res) => {
   const user = await User.findOne({
     where: { id: req.params.id },
     attributes: [
-      "id",
+      "id_user",
       "name",
       "username",
       "email",
@@ -50,16 +50,10 @@ exports.GetUserId = asyncMiddleware(async (req, res) => {
 //Update User
 exports.UpdateUser = asyncMiddleware(async (req, res) => {
   await User.update(
-    {
-      // id: req.body.id,
-      // name: req.body.name,
-      // username: req.body.username,
-      // email: req.body.email,
-      // password: req.body.password,
-      // admin: req.body.admin,
+    {     
       status: req.body.status
     },
-    { where: { id: req.params.id } }
+    { where: { id_user: req.params.id } }
   );
   res.status(201).send({
     status: "User successfully updated!"
@@ -69,7 +63,7 @@ exports.UpdateUser = asyncMiddleware(async (req, res) => {
 
 //Delete User
 exports.DeleteUser = asyncMiddleware(async (req, res) => {
-  await User.destroy({ where: { id: req.params.id }})
+  await User.destroy({ where: { id_user: req.params.id }})
   res.status(200).send({
     status: "User Deleted Successfully!"
   });

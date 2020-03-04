@@ -21,13 +21,24 @@ db.article = require("../model/article.js")(sequelize, Sequelize);
 db.comment = require("../model/comment.js")(sequelize, Sequelize);
 
 db.user.hasMany(db.article, {  
-  foreignKey: "user_id"  
+  foreignKey: "id_user"  
 });
 db.user.hasMany(db.comment, {
-  foreignKey: "user_id" 
+  foreignKey: "id_user" 
 });
 db.article.hasMany(db.comment, {  
-  foreignKey: "article_id"
+  foreignKey: "id_article"
 });
+
+db.article.belongsTo(db.user, {  
+  foreignKey: "id_user"  
+});
+db.comment.belongsTo(db.user, {
+  foreignKey: "id_user" 
+});
+db.comment.belongsTo(db.article, {  
+  foreignKey: "id_article"
+});
+
 
 module.exports = db;

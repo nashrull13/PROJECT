@@ -45,6 +45,13 @@ exports.login = asyncMiddleware(async (req, res) => {
       accessToken: null,
       reason: "Invalid Password!"
     });
+  } else if (user.status === false) {
+    return res.status(401).send({
+      auth: false,
+      accessToken: null,
+      reason: "Account suspended!"
+    }); 
+
   }
   const token = jwt.sign({ id: user.id }, config.secret, {
     expiresIn: 86400 // expires in 24 hours
@@ -55,7 +62,7 @@ exports.login = asyncMiddleware(async (req, res) => {
     accessToken: token,
     admin: user.admin,
     status: user.status,
-    id: user.id
+    id_user: user.id_user
 
   });
 });

@@ -14,12 +14,12 @@ require("./router/router.js")(app);
 const db = require("./app/db.js");
 // const Role = db.role;
 
- //force: true will drop the table if it already exists (comment this part after first run, to disable migration)
+// // force: true will drop the table if it already exists (comment this part after first run, to disable migration)
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log(`Drop and Resync with { force: true }`);
-  // initial();
-// });
-// require("./router/router.js")(app);
+// //  // initial();
+//  });
+//require("./router/router.js")(app);
 
 //sg mail
 // using Twilio SendGrid's v3 Node.js Library
