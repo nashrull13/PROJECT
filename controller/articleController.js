@@ -1,5 +1,6 @@
 const db = require("../app/db.js");
 const Article = db.article;
+const Comment = db.comment;
 const User = db.user;
 const asyncMiddleware = require("express-async-handler");
 
@@ -75,8 +76,8 @@ exports.GetArticleTrue = asyncMiddleware(async (req, res) => {
 });
 
 exports.GetArticle = asyncMiddleware(async (req, res) => {
-  const article = await Article.findAll({    
-    where: {status: true},
+  const article = await Article.findAll({
+    where: { status: true },
     attributes: [
       "id_article",
       "title",
@@ -85,21 +86,31 @@ exports.GetArticle = asyncMiddleware(async (req, res) => {
       "id_user",
       "createdAt"
     ],
-    include: 
+    include: [
       {
         model: User,
-        attributes: ["name","id_user"]
+        attributes: ["id_user", "name"]
+      },
+      {
+        model: Comment,
+        attributes: ["content"],
+        include: [
+          {
+            model: User,
+            attributes: ["name"]
+          }
+        ]
       }
-    
+    ]
   });
   res.status(200).json({
-    description: "Show article by id " + req.params.id,
+    description: "Show article by id ",
     data: article
   });
 });
 
 exports.GetArticleAdmin = asyncMiddleware(async (req, res) => {
-  const article = await Article.findAll({        
+  const article = await Article.findAll({
     attributes: [
       "id_article",
       "title",
@@ -108,23 +119,20 @@ exports.GetArticleAdmin = asyncMiddleware(async (req, res) => {
       "id_user",
       "createdAt"
     ],
-    include: 
-      {
-        model: User,
-        attributes: ["name","id_user"]
-      }
-    
+    include: {
+      model: User,
+      attributes: ["name", "id_user"]
+    }
   });
   res.status(200).json({
     description: "Show article by id " + req.params.id,
     data: article
   });
 });
-
 
 exports.GetArticleGuess = asyncMiddleware(async (req, res) => {
-  const article = await Article.findAll({    
-    where: {status: true},
+  const article = await Article.findAll({
+    where: { status: true },
     attributes: [
       "id_article",
       "title",
@@ -133,19 +141,28 @@ exports.GetArticleGuess = asyncMiddleware(async (req, res) => {
       "id_user",
       "createdAt"
     ],
-    include: 
+    include: [
       {
         model: User,
-        attributes: ["name","id_user"]
+        attributes: ["id_user", "name"]
+      },
+      {
+        model: Comment,
+        attributes: ["content"],
+        include: [
+          {
+            model: User,
+            attributes: ["name"]
+          }
+        ]
       }
-    
+    ]
   });
   res.status(200).json({
     description: "Show article by id " + req.params.id,
     data: article
   });
 });
-
 
 exports.GetArticleId = asyncMiddleware(async (req, res) => {
   const article = await Article.findOne({
@@ -174,7 +191,7 @@ exports.GetArticleId = asyncMiddleware(async (req, res) => {
 exports.GetArticleIdUser = asyncMiddleware(async (req, res) => {
   const article = await Article.findAll({
     where: { id_user: req.params.id },
-    
+
     attributes: ["id_article", "title", "content", "status"],
     include: [
       {

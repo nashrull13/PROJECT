@@ -7,7 +7,6 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.register = asyncMiddleware(async (req, res) => {
-
   // Save User to Database
   console.log("Processing func -> SignUp");
   await User.create({
@@ -17,7 +16,7 @@ exports.register = asyncMiddleware(async (req, res) => {
     password: bcrypt.hashSync(req.body.password),
     admin: req.body.admin,
     status: req.body.status
-  }); 
+  });
   res.status(201).send({
     status: "User registered successfully!"
   });
@@ -50,8 +49,7 @@ exports.login = asyncMiddleware(async (req, res) => {
       auth: false,
       accessToken: null,
       reason: "Account suspended!"
-    }); 
-
+    });
   }
   const token = jwt.sign({ id: user.id }, config.secret, {
     expiresIn: 86400 // expires in 24 hours
@@ -62,7 +60,7 @@ exports.login = asyncMiddleware(async (req, res) => {
     accessToken: token,
     admin: user.admin,
     status: user.status,
-    id_user: user.id_user
-
+    id_user: user.id_user,
+    name: user.name
   });
 });

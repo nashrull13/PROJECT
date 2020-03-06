@@ -6,18 +6,17 @@ const asyncMiddleware = require("express-async-handler");
 
 //Insert Comment
 exports.AddComment = asyncMiddleware(async (req, res) => {
-  await Comment.create(
-    {
-      id_article: req.params.id_article,
-      id_user: req.params.id_user,      
-      content: req.body.content,
-      status: true
-    }    
-  );
+  await Comment.create({
+    id_article: req.params.id_article,
+    id_user: req.params.id_user,
+    content: req.body.content,
+    status: true
+  });
   res.status(201).send({
-    status: "Comment successfully added!" +
-    req.params.id_article +
-    " Has been create!"
+    status:
+      "Comment successfully added!" +
+      req.params.id_article +
+      " Has been create!"
   });
 });
 
@@ -25,7 +24,6 @@ exports.AddComment = asyncMiddleware(async (req, res) => {
 exports.UpdateCommentTrue = asyncMiddleware(async (req, res) => {
   await Comment.update(
     {
-  
       status: true
     },
     { where: { id_comment: req.params.id } }
@@ -38,7 +36,6 @@ exports.UpdateCommentTrue = asyncMiddleware(async (req, res) => {
 exports.UpdateCommentFalse = asyncMiddleware(async (req, res) => {
   await Comment.update(
     {
-  
       status: false
     },
     { where: { id_comment: req.params.id } }
@@ -60,13 +57,17 @@ exports.GetCommentbyArticle = asyncMiddleware(async (req, res) => {
       "id_user",
       "createdAt"
     ],
-    include: 
+    include: [
+      {
+        model: User,
+        attributes: ["id_user", "name"]
+      },
       {
         model: Comment,
-        where: {status: true},
+        where: { status: true },
         required: false,
         require: false,
-        attributes: ["id_user", "id_comment", "content", "status", "createdAt"],        
+        attributes: ["id_user", "id_comment", "content", "status", "createdAt"],
         include: [
           {
             model: User,
@@ -74,6 +75,7 @@ exports.GetCommentbyArticle = asyncMiddleware(async (req, res) => {
           }
         ]
       }
+    ]
   });
 
   res.status(201).json({
@@ -84,22 +86,13 @@ exports.GetCommentbyArticle = asyncMiddleware(async (req, res) => {
 
 exports.GetComment = asyncMiddleware(async (req, res) => {
   const comment = await Comment.findAll({
-    attributes: [
-      "id_comment",
-      "id_article",
-      "id_user",
-      "content",
-      "status"      
-    ],
+    attributes: ["id_comment", "id_article", "id_user", "content", "status"],
     include: [
       {
         model: User,
         attributes: ["id_user", "name"]
       }
     ]
-
-    
-    
   });
   res.status(200).json({
     description: "Show All Comment",
@@ -107,13 +100,12 @@ exports.GetComment = asyncMiddleware(async (req, res) => {
   });
 });
 
-
 // //show all comment
 // exports.GetComment = asyncMiddleware(async (req, res) => {
 //   const comment = await Comment.findAll({
 //     attributes: [
-//       "title",     
-//       "content"      
+//       "title",
+//       "content"
 //     ]
 //   });
 //   res.status(201).json({
@@ -123,10 +115,9 @@ exports.GetComment = asyncMiddleware(async (req, res) => {
 // });
 
 //delete comment
-exports.DeleteComment = asyncMiddleware(async (req, res) => { 
+exports.DeleteComment = asyncMiddleware(async (req, res) => {
   await Comment.destroy({ where: { id_comment: req.params.id } });
   res.status(201).send({
     status: "Comment successfully deleted"
   });
 });
-
