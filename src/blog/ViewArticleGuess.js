@@ -39,6 +39,7 @@ export default class ViewArticle extends Component {
         {
           title: response.data.data.title,
           content: response.data.data.content,
+          name: response.data.data.user.name,
           comments: response.data.data.comments,
           createdAt: response.data.data.createdAt
         },
@@ -60,7 +61,7 @@ export default class ViewArticle extends Component {
               <a>{this.state.name}</a> */}</p>
 
             <hr />
-
+            <p>by {this.state.name}</p>
             <p>
               Posted on{" "}
               {moment(this.state.createdAt).format(" DD / MMMM / YYYY")}

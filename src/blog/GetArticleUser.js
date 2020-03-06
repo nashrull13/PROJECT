@@ -38,7 +38,7 @@ function GetArticleUser() {
 
   useEffect(() => {
     const results = filtered.filter(res =>
-      res.content.toLowerCase().includes(result)
+      res.title.toLowerCase().includes(result)
     );
     setData(results);
   }, [result]);
@@ -84,17 +84,14 @@ function GetArticleUser() {
                     <li>
                       <span>
                         <i class="glyphicon glyphicon-calendar"></i>
-                        {moment(data.createdAt).format(
-                          " DD / MMMM / YYYY"
-                        )}{" "}
+                        {moment(data.createdAt).format(" DD / MMMM / YYYY")}
                       </span>
                     </li>
-                    <li>|</li>
+                    <li> | </li>
                     <span>
                       <i class="glyphicon glyphicon-comment"></i>{" "}
                       {data.comments.length} Comments
                     </span>
-                    <li>|</li>
                   </ul>
                 </div>
               </div>
@@ -109,7 +106,6 @@ function GetArticleUser() {
   return (
     <div>
       <div>
-        <h2>Search</h2>
         <form class="form-inline d-flex justify-content-center md-form form-sm active-purple active-purple-2 mt-5">
           <i class="fa fa-search" aria-hidden="true"></i>
           <input

@@ -61,7 +61,7 @@ export default class ViewArticle extends Component {
     axios
       .delete(`http://localhost:8080/comment/${id}`)
       .then(alert("Comment deleted!"));
-    window.location.reload(false);
+    window.location.reload();
   }
 
   render() {
